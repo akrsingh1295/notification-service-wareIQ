@@ -2,9 +2,16 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from twilio.rest import Client
 import requests
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 api = Api(app)
+
+twilio_account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 
 class NotificationResource(Resource):
     def post(self):
@@ -24,10 +31,8 @@ class NotificationResource(Resource):
             return 'Invalid notification type', 400
 
 def send_sms(message):
-    # Replace these values with your Twilio credentials
-    account_sid = 'AC29d0cecff367d348fd3d835faf82605e'
-    auth_token = '042a628e0afcbe1b5ace5477ca807ee7'
-    twilio_client = Client(account_sid, auth_token)
+    
+    twilio_client = Client(twilio_account_sid, twilio_auth_token)
     
     # Replace these values with your Twilio phone numbers
     from_phone_number = '+18152670083'
